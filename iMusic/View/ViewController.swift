@@ -89,7 +89,12 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         setUpUi()
         configureAudioSession()
-        prepareSongWithPlayer()
+        initiatePlayer()
+    }
+    
+    private func initiatePlayer() {
+        let initialSongIndex = viewModel.currentSongIndex
+        prepareSongWithPlayer(index: initialSongIndex)
     }
     
     private func setUpUi() {
@@ -166,24 +171,29 @@ class ViewController: UIViewController {
             self.currentTimeLabel.text = self.viewModel.getformattedCurrentSongTimeLabel(value: Float(currentTime))
             self.progressSlider.value = Float(currentTime)
         }.store(in: &cancellables)
+        
+        viewModel.$currentSongIndex.sink { indexSong in
+            self.audioPlayer?.stop()
+            self.prepareSongWithPlayer(index: indexSong)
+            if self.viewModel.getIsPlayerPlaying() {
+                self.goToBeginningAndStop()
+                self.viewModel.playPlayer()
+            } else {
+                self.goToBeginningAndStop()
+            }
+        }.store(in: &cancellables)
     }
     
     @objc private func playButtonTapped() {
         viewModel.togglePlayer()
     }
     
-    @objc private func nextButtonTapped() {
-        self.audioPlayer?.stop()
-        viewModel.currentSongIndex += 1
-        prepareSongWithPlayer()
-        self.audioPlayer?.play()
+    @objc private func previousButtonTapped() {
+        viewModel.setPreviousSong()
     }
     
-    @objc private func previousButtonTapped() {
-        self.audioPlayer?.stop()
-        viewModel.currentSongIndex -= 1
-        prepareSongWithPlayer()
-        self.audioPlayer?.play()
+    @objc private func nextButtonTapped() {
+        viewModel.setNextSong()
     }
     
     @objc private func timeTriggered() {
@@ -211,8 +221,8 @@ class ViewController: UIViewController {
         }
     }
     
-    private func prepareSongWithPlayer() {
-        guard let url = viewModel.getSongUrl() else { return }
+    private func prepareSongWithPlayer(index: Int) {
+        guard let url = viewModel.getSongUrl(with: index) else { return }
         do {
             audioPlayer = try AVAudioPlayer(contentsOf: url)
             audioPlayer?.prepareToPlay()
@@ -229,6 +239,13 @@ class ViewController: UIViewController {
         songTimer = Timer.scheduledTimer(
             timeInterval: 1, target: self, selector: #selector(timeTriggered), userInfo: nil, repeats: true
         )
+    }
+    
+    func goToBeginningAndStop() {
+        audioPlayer?.currentTime = 0
+        viewModel.setSongToZeroTime()
+        viewModel.updateCurrentSongPlayingTime(currentTime: audioPlayer?.currentTime)
+        viewModel.stopPlayer()
     }
 }
 
