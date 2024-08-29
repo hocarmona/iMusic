@@ -163,15 +163,10 @@ class PlayerViewController: UIViewController {
             }
         }.store(in: &cancellables)
         
-        viewModel.$currentSongDuration.sink { duration in
-            self.durationTimeLabel.text = self.viewModel.getformattedCurrentSongTimeLabel(value: Float(duration))
-        }.store(in: &cancellables)
-        
         viewModel.$currentSongTime.sink { currentTime in
-            self.currentTimeLabel.text = self.viewModel.getformattedCurrentSongTimeLabel(value: Float(currentTime))
             self.progressSlider.value = Float(currentTime)
         }.store(in: &cancellables)
-        
+         
         viewModel.$currentSongIndex.sink { indexSong in
             self.audioPlayer?.stop()
             self.prepareSongWithPlayer(index: indexSong)
@@ -181,6 +176,14 @@ class PlayerViewController: UIViewController {
             } else {
                 self.goToBeginningAndStop()
             }
+        }.store(in: &cancellables)
+        
+        viewModel.$songDurationTimeString.sink { formattedTime in
+            self.durationTimeLabel.text = formattedTime
+        }.store(in: &cancellables)
+        
+        viewModel.$currentSongTimeString.sink { formattedTime in
+            self.currentTimeLabel.text = formattedTime
         }.store(in: &cancellables)
     }
     
@@ -207,8 +210,8 @@ class PlayerViewController: UIViewController {
     }
     
     @objc private func sliderContinuesChange() {
-        let value = progressSlider.value
-        self.currentTimeLabel.text = viewModel.getformattedCurrentSongTimeLabel(value: value)
+        let continiousTimevalue = progressSlider.value
+        self.currentTimeLabel.text = Utils.getformattedCurrentSongTimeLabel(value: continiousTimevalue)
     }
     
     func configureAudioSession() {
@@ -228,11 +231,15 @@ class PlayerViewController: UIViewController {
             audioPlayer?.prepareToPlay()
             self.viewModel.setCurrentSongPlaying(song: audioPlayer)
             progressSlider.minimumValue = 0
-            progressSlider.maximumValue = Float(audioPlayer?.duration ?? 1)
-            durationTimeLabel.text = viewModel.getformattedCurrentSongTimeLabel(value: Float(audioPlayer?.duration ?? 0))
+            progressSlider.maximumValue = Float(viewModel.getCurrentSongDuration())
+            self.setMetadaData()
         } catch {
             print("error playing audio")
         }
+    }
+    
+    func setMetadaData() {
+        
     }
     
     private func startSongTime() {

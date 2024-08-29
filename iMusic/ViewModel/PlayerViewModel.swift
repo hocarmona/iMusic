@@ -10,10 +10,18 @@ import Foundation
 
 class PlayerViewModel {
     
-    private var audioPlayer: AVAudioPlayer?
+    private var audioPlayer: AVAudioPlayer? {
+        didSet {
+            currentSongDuration = audioPlayer?.duration ?? 0
+            songDurationTimeString = getformattedCurrentSongTimeLabel(value: Float(currentSongDuration))
+        }
+    }
+    
     @Published var isPlaying = false
     @Published var currentSongDuration: TimeInterval = 0
     @Published var currentSongTime: TimeInterval = 0
+    @Published var currentSongTimeString: String = "0:00"
+    @Published var songDurationTimeString: String = "0:00"
     private var songs: [Song] = []
     private var songsRepository = SongsRepository()
     @Published var currentSongIndex: Int = 0
@@ -55,6 +63,8 @@ class PlayerViewModel {
         if let currentTime,
            isPlaying {
             self.currentSongTime = currentTime
+            self.currentSongTimeString = getformattedCurrentSongTimeLabel(value: Float(currentTime))
+            self.songDurationTimeString = getformattedCurrentSongTimeLabel(value: Float(currentSongDuration))
         }
     }
     
