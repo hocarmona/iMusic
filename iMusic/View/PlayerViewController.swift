@@ -9,7 +9,7 @@ import AVFoundation
 import Combine
 import UIKit
 
-class ViewController: UIViewController {
+class PlayerViewController: UIViewController {
     
     var audioPlayer: AVAudioPlayer?
     var cancellables: Set<AnyCancellable> = []
