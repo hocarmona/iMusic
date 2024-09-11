@@ -7,6 +7,7 @@
 
 import AVFoundation
 import Combine
+import MediaPlayer
 import UIKit
 
 class PlayerViewController: UIViewController {
@@ -102,6 +103,8 @@ class PlayerViewController: UIViewController {
     private func initiatePlayer() {
         let initialSongIndex = viewModel.currentSongIndex
         prepareSongWithPlayer(index: initialSongIndex)
+        setupNowPlayingInfo(song: Song(name: ""))
+        setupRemoteTransportControls()
     }
     
     private func setUpUi() {
@@ -204,20 +207,21 @@ class PlayerViewController: UIViewController {
         viewModel.togglePlayer()
     }
     
-    @objc private func previousButtonTapped() {
+    @objc internal func previousButtonTapped() {
         viewModel.setPreviousSong()
         DispatchQueue.main.async {
             self.setSongMetadaDataIfExist(for: self.viewModel.getSongIndex())
         }
     }
     
-    @objc private func nextButtonTapped() {
+    @objc internal func nextButtonTapped() {
         viewModel.setNextSong()
         self.setSongMetadaDataIfExist(for: self.viewModel.getSongIndex())
     }
     
     @objc private func timeTriggered() {
         viewModel.updateCurrentSongPlayingTime(currentTime: audioPlayer?.currentTime)
+        setupNowPlayingInfo(song: Song(name: ""))
     }
     
     @objc private func sliderFinalValue() {
@@ -248,6 +252,7 @@ class PlayerViewController: UIViewController {
         progressSlider.minimumValue = 0
         progressSlider.maximumValue = Float(viewModel.getCurrentSongDuration())
         self.setSongMetadaDataIfExist(for: index)
+        setupNowPlayingInfo(song: Song(name: ""))
     }
     
     func setSongMetadaDataIfExist(for songIndex: Int) {
