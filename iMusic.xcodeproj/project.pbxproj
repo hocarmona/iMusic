@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6A4C2EEA2C800FFE00BA8305 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4C2EE92C800FFE00BA8305 /* Utils.swift */; };
+		6A4C2EEC2C801BE400BA8305 /* aQuiénLeImporta.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6A4C2EEB2C801BE400BA8305 /* aQuiénLeImporta.mp3 */; };
 		6A8463B92C76F556000E5513 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8463B82C76F556000E5513 /* AppDelegate.swift */; };
 		6A8463BB2C76F556000E5513 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8463BA2C76F556000E5513 /* SceneDelegate.swift */; };
 		6A8463BD2C76F556000E5513 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8463BC2C76F556000E5513 /* PlayerViewController.swift */; };
@@ -18,7 +19,6 @@
 		6A8463CF2C7C0BA6000E5513 /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8463CE2C7C0BA6000E5513 /* PlayerViewModel.swift */; };
 		6A8463D12C7CDA36000E5513 /* seraPorqueTeAmo.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6A8463D02C7CDA36000E5513 /* seraPorqueTeAmo.mp3 */; };
 		6A8463D32C7CDB0C000E5513 /* perfecta.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6A8463D22C7CDB0C000E5513 /* perfecta.mp3 */; };
-		6A8463D52C7CDB40000E5513 /* aQuiénLeImporta.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6A8463D42C7CDB40000E5513 /* aQuiénLeImporta.mp3 */; };
 		6A8463D72C7CDC11000E5513 /* laFuerzaDelDestino.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6A8463D62C7CDC11000E5513 /* laFuerzaDelDestino.mp3 */; };
 		6A8463D92C7D761E000E5513 /* SongsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8463D82C7D761E000E5513 /* SongsRepository.swift */; };
 		6A8463E02C7D77F1000E5513 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8463DF2C7D77F1000E5513 /* Song.swift */; };
@@ -26,6 +26,7 @@
 
 /* Begin PBXFileReference section */
 		6A4C2EE92C800FFE00BA8305 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		6A4C2EEB2C801BE400BA8305 /* aQuiénLeImporta.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "aQuiénLeImporta.mp3"; sourceTree = "<group>"; };
 		6A8463B52C76F556000E5513 /* iMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A8463B82C76F556000E5513 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6A8463BA2C76F556000E5513 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -38,7 +39,6 @@
 		6A8463CE2C7C0BA6000E5513 /* PlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
 		6A8463D02C7CDA36000E5513 /* seraPorqueTeAmo.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = seraPorqueTeAmo.mp3; sourceTree = "<group>"; };
 		6A8463D22C7CDB0C000E5513 /* perfecta.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = perfecta.mp3; sourceTree = "<group>"; };
-		6A8463D42C7CDB40000E5513 /* aQuiénLeImporta.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "aQuiénLeImporta.mp3"; sourceTree = "<group>"; };
 		6A8463D62C7CDC11000E5513 /* laFuerzaDelDestino.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = laFuerzaDelDestino.mp3; sourceTree = "<group>"; };
 		6A8463D82C7D761E000E5513 /* SongsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongsRepository.swift; sourceTree = "<group>"; };
 		6A8463DF2C7D77F1000E5513 /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
@@ -136,8 +136,8 @@
 				6A8463CC2C76F618000E5513 /* Sixteen.mp3 */,
 				6A8463D22C7CDB0C000E5513 /* perfecta.mp3 */,
 				6A8463D02C7CDA36000E5513 /* seraPorqueTeAmo.mp3 */,
+				6A4C2EEB2C801BE400BA8305 /* aQuiénLeImporta.mp3 */,
 				6A8463D62C7CDC11000E5513 /* laFuerzaDelDestino.mp3 */,
-				6A8463D42C7CDB40000E5513 /* aQuiénLeImporta.mp3 */,
 			);
 			path = Files;
 			sourceTree = "<group>";
@@ -203,7 +203,7 @@
 				6A8463D32C7CDB0C000E5513 /* perfecta.mp3 in Resources */,
 				6A8463D72C7CDC11000E5513 /* laFuerzaDelDestino.mp3 in Resources */,
 				6A8463C52C76F559000E5513 /* LaunchScreen.storyboard in Resources */,
-				6A8463D52C7CDB40000E5513 /* aQuiénLeImporta.mp3 in Resources */,
+				6A4C2EEC2C801BE400BA8305 /* aQuiénLeImporta.mp3 in Resources */,
 				6A8463CD2C76F619000E5513 /* Sixteen.mp3 in Resources */,
 				6A8463C22C76F559000E5513 /* Assets.xcassets in Resources */,
 				6A8463D12C7CDA36000E5513 /* seraPorqueTeAmo.mp3 in Resources */,

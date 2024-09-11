@@ -24,6 +24,12 @@ class PlayerViewModel {
     @Published var songDurationTimeString: String = "0:00"
     private var songs: [Song] = []
     private var songsRepository = SongsRepository()
+    var songIndex: Int = 0 {
+        didSet {
+            currentSongIndex = songIndex
+        }
+    }
+    
     @Published var currentSongIndex: Int = 0
     
     init() {
@@ -33,6 +39,22 @@ class PlayerViewModel {
     func getSongUrl(with index: Int) -> URL? {
         guard let path = Bundle.main.path(forResource: songs[index].name, ofType: "mp3") else { return nil}
         return URL(fileURLWithPath: path)
+    }
+    
+    func getAudioPlayer() -> AVAudioPlayer? {
+        var audioPlayer: AVAudioPlayer?
+        if let url = getSongUrl(with: songIndex) {
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                return audioPlayer
+            } catch {
+                print("error playing audio")
+            }
+        }
+        return audioPlayer
+    }
+    func getSongIndex() -> Int {
+        return songIndex
     }
     
     func getIsPlayerPlaying() -> Bool {
@@ -74,18 +96,18 @@ class PlayerViewModel {
     
     func setNextSong() {
         let maxSongsIndex = self.songs.count - 1
-        if currentSongIndex + 1 > maxSongsIndex {
-            self.currentSongIndex = 0
+        if songIndex + 1 > maxSongsIndex {
+            self.songIndex = 0
         } else {
-            self.currentSongIndex += 1
+            self.songIndex += 1
         }
     }
     
     func setPreviousSong() {
-        if currentSongIndex <= 0 {
-            currentSongIndex = 0
+        if songIndex <= 0 {
+            songIndex = 0
         } else {
-            currentSongIndex -= 1
+            songIndex -= 1
         }
     }
     

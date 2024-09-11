@@ -23,6 +23,13 @@ class PlayerViewController: UIViewController {
         return label
     }()
     
+    let songImage: UIImageView = {
+        let image = UIImageView(image: UIImage(named: "unknownSong"))
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.sizeToFit()
+        return image
+    }()
+    
     let progressSlider: UISlider = {
         let progressSlider = UISlider()
         progressSlider.translatesAutoresizingMaskIntoConstraints = false
@@ -112,6 +119,7 @@ class PlayerViewController: UIViewController {
         view.addSubview(previousButton)
         view.addSubview(currentTimeLabel)
         view.addSubview(durationTimeLabel)
+        view.addSubview(songImage)
     }
     
     private func setConstraints() {
@@ -139,7 +147,12 @@ class PlayerViewController: UIViewController {
             currentTimeLabel.leadingAnchor.constraint(equalTo: progressSlider.leadingAnchor, constant: 4),
             
             durationTimeLabel.topAnchor.constraint(equalTo: progressSlider.bottomAnchor, constant: 16),
-            durationTimeLabel.trailingAnchor.constraint(equalTo: progressSlider.trailingAnchor, constant: -4)
+            durationTimeLabel.trailingAnchor.constraint(equalTo: progressSlider.trailingAnchor, constant: -4),
+            
+            songImage.bottomAnchor.constraint(equalTo: progressSlider.topAnchor, constant: -40),
+            songImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            songImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+            songImage.heightAnchor.constraint(equalToConstant: 350)
         ])
 
     }
@@ -193,10 +206,14 @@ class PlayerViewController: UIViewController {
     
     @objc private func previousButtonTapped() {
         viewModel.setPreviousSong()
+        DispatchQueue.main.async {
+            self.setSongMetadaDataIfExist(for: self.viewModel.getSongIndex())
+        }
     }
     
     @objc private func nextButtonTapped() {
         viewModel.setNextSong()
+        self.setSongMetadaDataIfExist(for: self.viewModel.getSongIndex())
     }
     
     @objc private func timeTriggered() {
@@ -225,21 +242,34 @@ class PlayerViewController: UIViewController {
     }
     
     private func prepareSongWithPlayer(index: Int) {
-        guard let url = viewModel.getSongUrl(with: index) else { return }
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.prepareToPlay()
-            self.viewModel.setCurrentSongPlaying(song: audioPlayer)
-            progressSlider.minimumValue = 0
-            progressSlider.maximumValue = Float(viewModel.getCurrentSongDuration())
-            self.setMetadaData()
-        } catch {
-            print("error playing audio")
+        audioPlayer = viewModel.getAudioPlayer()
+        audioPlayer?.prepareToPlay()
+        self.viewModel.setCurrentSongPlaying(song: audioPlayer)
+        progressSlider.minimumValue = 0
+        progressSlider.maximumValue = Float(viewModel.getCurrentSongDuration())
+        self.setSongMetadaDataIfExist(for: index)
+    }
+    
+    func setSongMetadaDataIfExist(for songIndex: Int) {
+        guard let url = viewModel.getSongUrl(with: songIndex) else { return }
+        let asset = AVAsset(url: url)
+        
+        if !asset.commonMetadata.isEmpty {
+            setFoundSongMetadaData(asset: asset)
+        } else {
+            songImage.image = UIImage(named: "unknownSong")
         }
     }
     
-    func setMetadaData() {
-        
+    private func setFoundSongMetadaData(asset: AVAsset) {
+        for medaDataItem in asset.commonMetadata {
+            if medaDataItem.commonKey == .commonKeyArtwork,
+               let data = medaDataItem.value as? Data {
+                songImage.image = UIImage(data: data)
+            } else {
+                songImage.image = UIImage(named: "unknownSong")
+            }
+        }
     }
     
     private func startSongTime() {
