@@ -9,13 +9,16 @@ import Foundation
 import MediaPlayer
 
 extension PlayerViewController {
-    func setupNowPlayingInfo(song: Song) {
+    func setupNowPlayingRemoteControlInfo() {
+        let defaultSongInfo = viewModel.defaultSongValues
+        let songInfo = viewModel.obtainSongMetaData(index: viewModel.getSongIndex()) ?? defaultSongInfo
         var nowPlayingInfo = [String: Any]()
         
-        nowPlayingInfo[MPMediaItemPropertyTitle] = "titleee"
-        nowPlayingInfo[MPMediaItemPropertyArtist] = "artistttt"
+        nowPlayingInfo[MPMediaItemPropertyTitle] = songInfo.songNameTitle
+        nowPlayingInfo[MPMediaItemPropertyArtist] = songInfo.songArtist
         
-        if let image = UIImage(named: "unknownSong") {
+        if let imageData = songInfo.songImage,
+           let image = UIImage(data: imageData) {
             let artwork = MPMediaItemArtwork(boundsSize: image.size) { size in
                 return image
             }

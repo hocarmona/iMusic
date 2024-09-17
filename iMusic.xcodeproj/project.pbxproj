@@ -10,6 +10,10 @@
 		6A4C2EEA2C800FFE00BA8305 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4C2EE92C800FFE00BA8305 /* Utils.swift */; };
 		6A4C2EEC2C801BE400BA8305 /* aQuiénLeImporta.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6A4C2EEB2C801BE400BA8305 /* aQuiénLeImporta.mp3 */; };
 		6A4C2EEE2C91D41E00BA8305 /* PlayerViewController+RemoteControlsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4C2EED2C91D41E00BA8305 /* PlayerViewController+RemoteControlsExtension.swift */; };
+		6A4C2EF22C935BCC00BA8305 /* JoshWoodward-DW-03-Insomnia.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6A4C2EEF2C935BCC00BA8305 /* JoshWoodward-DW-03-Insomnia.mp3 */; };
+		6A4C2EF32C935BCC00BA8305 /* JoshWoodward-DW-07-TheRavenAndTheSwan.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6A4C2EF02C935BCC00BA8305 /* JoshWoodward-DW-07-TheRavenAndTheSwan.mp3 */; };
+		6A4C2EF42C935BCC00BA8305 /* JoshWoodward-AttS-01-Release.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6A4C2EF12C935BCC00BA8305 /* JoshWoodward-AttS-01-Release.mp3 */; };
+		6A4C2EF62C936AEB00BA8305 /* SongInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4C2EF52C936AEB00BA8305 /* SongInfo.swift */; };
 		6A8463B92C76F556000E5513 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8463B82C76F556000E5513 /* AppDelegate.swift */; };
 		6A8463BB2C76F556000E5513 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8463BA2C76F556000E5513 /* SceneDelegate.swift */; };
 		6A8463BD2C76F556000E5513 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A8463BC2C76F556000E5513 /* PlayerViewController.swift */; };
@@ -29,6 +33,10 @@
 		6A4C2EE92C800FFE00BA8305 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		6A4C2EEB2C801BE400BA8305 /* aQuiénLeImporta.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "aQuiénLeImporta.mp3"; sourceTree = "<group>"; };
 		6A4C2EED2C91D41E00BA8305 /* PlayerViewController+RemoteControlsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayerViewController+RemoteControlsExtension.swift"; sourceTree = "<group>"; };
+		6A4C2EEF2C935BCC00BA8305 /* JoshWoodward-DW-03-Insomnia.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "JoshWoodward-DW-03-Insomnia.mp3"; sourceTree = "<group>"; };
+		6A4C2EF02C935BCC00BA8305 /* JoshWoodward-DW-07-TheRavenAndTheSwan.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "JoshWoodward-DW-07-TheRavenAndTheSwan.mp3"; sourceTree = "<group>"; };
+		6A4C2EF12C935BCC00BA8305 /* JoshWoodward-AttS-01-Release.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "JoshWoodward-AttS-01-Release.mp3"; sourceTree = "<group>"; };
+		6A4C2EF52C936AEB00BA8305 /* SongInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongInfo.swift; sourceTree = "<group>"; };
 		6A8463B52C76F556000E5513 /* iMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A8463B82C76F556000E5513 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6A8463BA2C76F556000E5513 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -103,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				6A8463DF2C7D77F1000E5513 /* Song.swift */,
+				6A4C2EF52C936AEB00BA8305 /* SongInfo.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -136,11 +145,14 @@
 		6A8463DE2C7D7754000E5513 /* Files */ = {
 			isa = PBXGroup;
 			children = (
+				6A4C2EEF2C935BCC00BA8305 /* JoshWoodward-DW-03-Insomnia.mp3 */,
+				6A4C2EF02C935BCC00BA8305 /* JoshWoodward-DW-07-TheRavenAndTheSwan.mp3 */,
 				6A8463CC2C76F618000E5513 /* Sixteen.mp3 */,
 				6A8463D22C7CDB0C000E5513 /* perfecta.mp3 */,
 				6A8463D02C7CDA36000E5513 /* seraPorqueTeAmo.mp3 */,
 				6A4C2EEB2C801BE400BA8305 /* aQuiénLeImporta.mp3 */,
 				6A8463D62C7CDC11000E5513 /* laFuerzaDelDestino.mp3 */,
+				6A4C2EF12C935BCC00BA8305 /* JoshWoodward-AttS-01-Release.mp3 */,
 			);
 			path = Files;
 			sourceTree = "<group>";
@@ -203,10 +215,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A4C2EF22C935BCC00BA8305 /* JoshWoodward-DW-03-Insomnia.mp3 in Resources */,
 				6A8463D32C7CDB0C000E5513 /* perfecta.mp3 in Resources */,
 				6A8463D72C7CDC11000E5513 /* laFuerzaDelDestino.mp3 in Resources */,
+				6A4C2EF42C935BCC00BA8305 /* JoshWoodward-AttS-01-Release.mp3 in Resources */,
 				6A8463C52C76F559000E5513 /* LaunchScreen.storyboard in Resources */,
 				6A4C2EEC2C801BE400BA8305 /* aQuiénLeImporta.mp3 in Resources */,
+				6A4C2EF32C935BCC00BA8305 /* JoshWoodward-DW-07-TheRavenAndTheSwan.mp3 in Resources */,
 				6A8463CD2C76F619000E5513 /* Sixteen.mp3 in Resources */,
 				6A8463C22C76F559000E5513 /* Assets.xcassets in Resources */,
 				6A8463D12C7CDA36000E5513 /* seraPorqueTeAmo.mp3 in Resources */,
@@ -221,6 +236,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A4C2EF62C936AEB00BA8305 /* SongInfo.swift in Sources */,
 				6A8463E02C7D77F1000E5513 /* Song.swift in Sources */,
 				6A8463BD2C76F556000E5513 /* PlayerViewController.swift in Sources */,
 				6A8463CF2C7C0BA6000E5513 /* PlayerViewModel.swift in Sources */,
