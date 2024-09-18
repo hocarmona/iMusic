@@ -62,37 +62,29 @@ class PlayerViewController: UIViewController {
         return progressSlider
     }()
     
-    let playButton: UIButton = {
-        let button = UIButton(type: .roundedRect)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Play", for: .normal)
-        button.backgroundColor = .green
-        button.layer.cornerRadius = 40
-        button.setTitleColor(.black, for: .normal)
-        button.clipsToBounds = true
-        return button
+    let playButtonImage: UIImageView = {
+        let image = UIImageView(image: UIImage(named: "stop-button"))
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.sizeToFit()
+        image.tintColor = .white
+        image.isUserInteractionEnabled = true
+        return image
     }()
     
-    let nextButton: UIButton = {
-        let button = UIButton(type: .roundedRect)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("next", for: .normal)
-        button.backgroundColor = .green
-        button.layer.cornerRadius = 20
-        button.setTitleColor(.black, for: .normal)
-        button.clipsToBounds = true
-        return button
+    let previousButtonImage: UIImageView = {
+        let image = UIImageView(image: UIImage(named: "previousImage"))
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.sizeToFit()
+        image.isUserInteractionEnabled = true
+        return image
     }()
     
-    let previousButton: UIButton = {
-        let button = UIButton(type: .roundedRect)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("prev", for: .normal)
-        button.backgroundColor = .green
-        button.layer.cornerRadius = 20
-        button.setTitleColor(.black, for: .normal)
-        button.clipsToBounds = true
-        return button
+    let nextButtonImage: UIImageView = {
+        let image = UIImageView(image: UIImage(named: "nextImage"))
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.sizeToFit()
+        image.isUserInteractionEnabled = true
+        return image
     }()
     
     var currentTimeLabel: UILabel = {
@@ -135,9 +127,9 @@ class PlayerViewController: UIViewController {
     
     private func addViews() {
         view.addSubview(progressSlider)
-        view.addSubview(playButton)
-        view.addSubview(nextButton)
-        view.addSubview(previousButton)
+        view.addSubview(playButtonImage)
+        view.addSubview(nextButtonImage)
+        view.addSubview(previousButtonImage)
         view.addSubview(currentTimeLabel)
         view.addSubview(durationTimeLabel)
         view.addSubview(artistName)
@@ -147,24 +139,24 @@ class PlayerViewController: UIViewController {
     
     private func setConstraints() {
         NSLayoutConstraint.activate([
-            playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            playButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -80),
-            playButton.heightAnchor.constraint(equalToConstant: 80),
-            playButton.widthAnchor.constraint(equalToConstant: 80),
+            playButtonImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            playButtonImage.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -80),
+            playButtonImage.heightAnchor.constraint(equalToConstant: 80),
+            playButtonImage.widthAnchor.constraint(equalToConstant: 80),
             
-            nextButton.leadingAnchor.constraint(equalTo: playButton.trailingAnchor, constant: 16),
-            nextButton.centerYAnchor.constraint(equalTo: playButton.centerYAnchor),
-            nextButton.heightAnchor.constraint(equalToConstant: 40),
-            nextButton.widthAnchor.constraint(equalToConstant: 40),
-            
-            previousButton.trailingAnchor.constraint(equalTo: playButton.leadingAnchor, constant: -16),
-            previousButton.centerYAnchor.constraint(equalTo: playButton.centerYAnchor),
-            previousButton.heightAnchor.constraint(equalToConstant: 40),
-            previousButton.widthAnchor.constraint(equalToConstant: 40),
+            nextButtonImage.leadingAnchor.constraint(equalTo: playButtonImage.trailingAnchor, constant: 32),
+            nextButtonImage.centerYAnchor.constraint(equalTo: playButtonImage.centerYAnchor),
+            nextButtonImage.heightAnchor.constraint(equalToConstant: 40),
+            nextButtonImage.widthAnchor.constraint(equalToConstant: 40),
+
+            previousButtonImage.trailingAnchor.constraint(equalTo: playButtonImage.leadingAnchor, constant: -32),
+            previousButtonImage.centerYAnchor.constraint(equalTo: playButtonImage.centerYAnchor),
+            previousButtonImage.heightAnchor.constraint(equalToConstant: 40),
+            previousButtonImage.widthAnchor.constraint(equalToConstant: 40),
             
             progressSlider.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             progressSlider.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            progressSlider.bottomAnchor.constraint(equalTo: playButton.topAnchor, constant: -40),
+            progressSlider.bottomAnchor.constraint(equalTo: playButtonImage.topAnchor, constant: -40),
             
             currentTimeLabel.topAnchor.constraint(equalTo: progressSlider.bottomAnchor, constant: 16),
             currentTimeLabel.leadingAnchor.constraint(equalTo: progressSlider.leadingAnchor, constant: 4),
@@ -187,9 +179,18 @@ class PlayerViewController: UIViewController {
     }
     
     private func setActions() {
-        playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
-        nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
-        previousButton.addTarget(self, action: #selector(previousButtonTapped), for: .touchUpInside)
+        setGestures()
+    }
+    
+    private func setGestures() {
+        let previousButtonGesture = UITapGestureRecognizer(target: self, action: #selector(previousButtonTapped))
+        previousButtonImage.addGestureRecognizer(previousButtonGesture)
+        
+        let nextButtonGesture = UITapGestureRecognizer(target: self, action: #selector(nextButtonTapped))
+        nextButtonImage.addGestureRecognizer(nextButtonGesture)
+        
+        let playButtonGesture = UITapGestureRecognizer(target: self, action: #selector(playButtonTapped))
+        playButtonImage.addGestureRecognizer(playButtonGesture)
     }
     
     private func setListeners() {
@@ -197,11 +198,11 @@ class PlayerViewController: UIViewController {
             if playing {
                 self.audioPlayer?.play()
                 self.startSongTime()
-                self.playButton.setTitle("Pause", for: .normal)
+                self.playButtonImage.image = UIImage(named: "stop-button")
             } else {
                 self.audioPlayer?.stop()
                 self.songTimer?.invalidate()
-                self.playButton.setTitle("Play", for: .normal)
+                self.playButtonImage.image = UIImage(named: "play-button")
             }
         }.store(in: &cancellables)
         
