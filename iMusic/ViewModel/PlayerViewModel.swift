@@ -90,8 +90,7 @@ class PlayerViewModel {
     }
     
     func updateCurrentSongPlayingTime(currentTime: TimeInterval?) {
-        if let currentTime,
-           isPlaying {
+        if let currentTime {
             self.currentSongTime = currentTime
             self.currentSongTimeString = getformattedCurrentSongTimeLabel(value: Float(currentTime))
             self.songDurationTimeString = getformattedCurrentSongTimeLabel(value: Float(currentSongDuration))
