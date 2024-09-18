@@ -22,13 +22,21 @@ class PlayerViewModel {
     @Published var currentSongTime: TimeInterval = 0
     @Published var currentSongTimeString: String = "0:00"
     @Published var songDurationTimeString: String = "0:00"
+    @Published var songTitle: String = ""
+    @Published var songArtist: String = ""
+    @Published var songImageData: Data?
     private var songs: [Song] = []
     private var songsRepository = SongsRepository()
     var songIndex: Int = 0 {
         didSet {
             currentSongIndex = songIndex
+            obtainSongMetaData(index: songIndex)
         }
     }
+    
+    var defaultSongValues =  SongInfo(songNameTitle: "unknown",
+                                     songArtist: "unknown artist",
+                                      songImage: nil)
     
     @Published var currentSongIndex: Int = 0
     
@@ -82,8 +90,7 @@ class PlayerViewModel {
     }
     
     func updateCurrentSongPlayingTime(currentTime: TimeInterval?) {
-        if let currentTime,
-           isPlaying {
+        if let currentTime {
             self.currentSongTime = currentTime
             self.currentSongTimeString = getformattedCurrentSongTimeLabel(value: Float(currentTime))
             self.songDurationTimeString = getformattedCurrentSongTimeLabel(value: Float(currentSongDuration))
@@ -109,6 +116,32 @@ class PlayerViewModel {
         } else {
             songIndex -= 1
         }
+    }
+    
+    func obtainSongMetaData(index: Int) -> SongInfo? {
+        guard let path = Bundle.main.path(forResource: songs[index].name, ofType: "mp3") else { return nil }
+        let url = URL(fileURLWithPath: path)
+        let asset = AVAsset(url: url)
+        
+        if !asset.commonMetadata.isEmpty {
+            for metaDataItem in asset.commonMetadata where metaDataItem.commonKey == .commonKeyArtwork {
+                let imageData = metaDataItem.value as? Data
+                let titleMetadata = AVMetadataItem.metadataItems(
+                    from: asset.commonMetadata, withKey: AVMetadataKey.commonKeyTitle,keySpace: .common
+                ).first?.value as? String
+                let artistMetadata = AVMetadataItem.metadataItems(
+                    from: asset.commonMetadata, withKey: AVMetadataKey.commonKeyArtist, keySpace: .common
+                ).first?.value as? String
+                songTitle = titleMetadata ?? "Unknown"
+                songArtist = artistMetadata ?? "Unknwon Artist"
+                songImageData = imageData
+                return SongInfo(songNameTitle: songTitle,
+                                songArtist: songArtist,
+                                songImage: imageData)
+            }
+        }
+        
+        return nil
     }
     
     func getformattedCurrentSongTimeLabel(value: Float) -> String {

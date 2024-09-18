@@ -7,6 +7,7 @@
 
 import AVFoundation
 import Combine
+import MediaPlayer
 import UIKit
 
 class PlayerViewController: UIViewController {
@@ -30,6 +31,24 @@ class PlayerViewController: UIViewController {
         return image
     }()
     
+    var songName: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = . white
+        label.font = UIFont.systemFont(ofSize: 24, weight: .bold, width: .standard)
+        label.text = "Song Name"
+        return label
+    }()
+    
+    var artistName: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = . white.withAlphaComponent(0.7)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold, width: .standard)
+        label.text = "Artist Name"
+        return label
+    }()
+    
     let progressSlider: UISlider = {
         let progressSlider = UISlider()
         progressSlider.translatesAutoresizingMaskIntoConstraints = false
@@ -43,37 +62,29 @@ class PlayerViewController: UIViewController {
         return progressSlider
     }()
     
-    let playButton: UIButton = {
-        let button = UIButton(type: .roundedRect)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Play", for: .normal)
-        button.backgroundColor = .green
-        button.layer.cornerRadius = 40
-        button.setTitleColor(.black, for: .normal)
-        button.clipsToBounds = true
-        return button
+    let playButtonImage: UIImageView = {
+        let image = UIImageView(image: UIImage(named: "stop-button"))
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.sizeToFit()
+        image.tintColor = .white
+        image.isUserInteractionEnabled = true
+        return image
     }()
     
-    let nextButton: UIButton = {
-        let button = UIButton(type: .roundedRect)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("next", for: .normal)
-        button.backgroundColor = .green
-        button.layer.cornerRadius = 20
-        button.setTitleColor(.black, for: .normal)
-        button.clipsToBounds = true
-        return button
+    let previousButtonImage: UIImageView = {
+        let image = UIImageView(image: UIImage(named: "previousImage"))
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.sizeToFit()
+        image.isUserInteractionEnabled = true
+        return image
     }()
     
-    let previousButton: UIButton = {
-        let button = UIButton(type: .roundedRect)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("prev", for: .normal)
-        button.backgroundColor = .green
-        button.layer.cornerRadius = 20
-        button.setTitleColor(.black, for: .normal)
-        button.clipsToBounds = true
-        return button
+    let nextButtonImage: UIImageView = {
+        let image = UIImageView(image: UIImage(named: "nextImage"))
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.sizeToFit()
+        image.isUserInteractionEnabled = true
+        return image
     }()
     
     var currentTimeLabel: UILabel = {
@@ -102,6 +113,8 @@ class PlayerViewController: UIViewController {
     private func initiatePlayer() {
         let initialSongIndex = viewModel.currentSongIndex
         prepareSongWithPlayer(index: initialSongIndex)
+        setupNowPlayingRemoteControlInfo()
+        setupRemoteTransportControls()
     }
     
     private func setUpUi() {
@@ -114,34 +127,36 @@ class PlayerViewController: UIViewController {
     
     private func addViews() {
         view.addSubview(progressSlider)
-        view.addSubview(playButton)
-        view.addSubview(nextButton)
-        view.addSubview(previousButton)
+        view.addSubview(playButtonImage)
+        view.addSubview(nextButtonImage)
+        view.addSubview(previousButtonImage)
         view.addSubview(currentTimeLabel)
         view.addSubview(durationTimeLabel)
+        view.addSubview(artistName)
+        view.addSubview(songName)
         view.addSubview(songImage)
     }
     
     private func setConstraints() {
         NSLayoutConstraint.activate([
-            playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            playButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -80),
-            playButton.heightAnchor.constraint(equalToConstant: 80),
-            playButton.widthAnchor.constraint(equalToConstant: 80),
+            playButtonImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            playButtonImage.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -80),
+            playButtonImage.heightAnchor.constraint(equalToConstant: 80),
+            playButtonImage.widthAnchor.constraint(equalToConstant: 80),
             
-            nextButton.leadingAnchor.constraint(equalTo: playButton.trailingAnchor, constant: 16),
-            nextButton.centerYAnchor.constraint(equalTo: playButton.centerYAnchor),
-            nextButton.heightAnchor.constraint(equalToConstant: 40),
-            nextButton.widthAnchor.constraint(equalToConstant: 40),
-            
-            previousButton.trailingAnchor.constraint(equalTo: playButton.leadingAnchor, constant: -16),
-            previousButton.centerYAnchor.constraint(equalTo: playButton.centerYAnchor),
-            previousButton.heightAnchor.constraint(equalToConstant: 40),
-            previousButton.widthAnchor.constraint(equalToConstant: 40),
+            nextButtonImage.leadingAnchor.constraint(equalTo: playButtonImage.trailingAnchor, constant: 32),
+            nextButtonImage.centerYAnchor.constraint(equalTo: playButtonImage.centerYAnchor),
+            nextButtonImage.heightAnchor.constraint(equalToConstant: 40),
+            nextButtonImage.widthAnchor.constraint(equalToConstant: 40),
+
+            previousButtonImage.trailingAnchor.constraint(equalTo: playButtonImage.leadingAnchor, constant: -32),
+            previousButtonImage.centerYAnchor.constraint(equalTo: playButtonImage.centerYAnchor),
+            previousButtonImage.heightAnchor.constraint(equalToConstant: 40),
+            previousButtonImage.widthAnchor.constraint(equalToConstant: 40),
             
             progressSlider.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             progressSlider.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            progressSlider.bottomAnchor.constraint(equalTo: playButton.topAnchor, constant: -40),
+            progressSlider.bottomAnchor.constraint(equalTo: playButtonImage.topAnchor, constant: -40),
             
             currentTimeLabel.topAnchor.constraint(equalTo: progressSlider.bottomAnchor, constant: 16),
             currentTimeLabel.leadingAnchor.constraint(equalTo: progressSlider.leadingAnchor, constant: 4),
@@ -149,7 +164,13 @@ class PlayerViewController: UIViewController {
             durationTimeLabel.topAnchor.constraint(equalTo: progressSlider.bottomAnchor, constant: 16),
             durationTimeLabel.trailingAnchor.constraint(equalTo: progressSlider.trailingAnchor, constant: -4),
             
-            songImage.bottomAnchor.constraint(equalTo: progressSlider.topAnchor, constant: -40),
+            artistName.leadingAnchor.constraint(equalTo: progressSlider.leadingAnchor),
+            artistName.bottomAnchor.constraint(equalTo: progressSlider.topAnchor, constant: -16),
+            
+            songName.leadingAnchor.constraint(equalTo: progressSlider.leadingAnchor),
+            songName.bottomAnchor.constraint(equalTo: artistName.topAnchor, constant: -8),
+            
+            songImage.bottomAnchor.constraint(equalTo: songName.topAnchor, constant: -40),
             songImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             songImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             songImage.heightAnchor.constraint(equalToConstant: 350)
@@ -158,9 +179,18 @@ class PlayerViewController: UIViewController {
     }
     
     private func setActions() {
-        playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
-        nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
-        previousButton.addTarget(self, action: #selector(previousButtonTapped), for: .touchUpInside)
+        setGestures()
+    }
+    
+    private func setGestures() {
+        let previousButtonGesture = UITapGestureRecognizer(target: self, action: #selector(previousButtonTapped))
+        previousButtonImage.addGestureRecognizer(previousButtonGesture)
+        
+        let nextButtonGesture = UITapGestureRecognizer(target: self, action: #selector(nextButtonTapped))
+        nextButtonImage.addGestureRecognizer(nextButtonGesture)
+        
+        let playButtonGesture = UITapGestureRecognizer(target: self, action: #selector(playButtonTapped))
+        playButtonImage.addGestureRecognizer(playButtonGesture)
     }
     
     private func setListeners() {
@@ -168,11 +198,11 @@ class PlayerViewController: UIViewController {
             if playing {
                 self.audioPlayer?.play()
                 self.startSongTime()
-                self.playButton.setTitle("Pause", for: .normal)
+                self.playButtonImage.image = UIImage(named: "stop-button")
             } else {
                 self.audioPlayer?.stop()
                 self.songTimer?.invalidate()
-                self.playButton.setTitle("Play", for: .normal)
+                self.playButtonImage.image = UIImage(named: "play-button")
             }
         }.store(in: &cancellables)
         
@@ -189,6 +219,7 @@ class PlayerViewController: UIViewController {
             } else {
                 self.goToBeginningAndStop()
             }
+            self.setupNowPlayingRemoteControlInfo()
         }.store(in: &cancellables)
         
         viewModel.$songDurationTimeString.sink { formattedTime in
@@ -198,26 +229,39 @@ class PlayerViewController: UIViewController {
         viewModel.$currentSongTimeString.sink { formattedTime in
             self.currentTimeLabel.text = formattedTime
         }.store(in: &cancellables)
+        
+        viewModel.$songTitle.sink { songTitle in
+            self.songName.text = songTitle
+        }.store(in: &cancellables)
+        
+        viewModel.$songArtist.sink { songArtist in
+            self.artistName.text = songArtist
+        }.store(in: &cancellables)
+        
+        viewModel.$songImageData.sink { imageData in
+            if let songImageData = imageData {
+                self.songImage.image = UIImage(data: songImageData)
+            } else {
+                self.songImage.image = UIImage(named: "unknownSong")
+            }
+        }.store(in: &cancellables)
     }
     
     @objc private func playButtonTapped() {
         viewModel.togglePlayer()
     }
     
-    @objc private func previousButtonTapped() {
+    @objc internal func previousButtonTapped() {
         viewModel.setPreviousSong()
-        DispatchQueue.main.async {
-            self.setSongMetadaDataIfExist(for: self.viewModel.getSongIndex())
-        }
     }
     
-    @objc private func nextButtonTapped() {
+    @objc internal func nextButtonTapped() {
         viewModel.setNextSong()
-        self.setSongMetadaDataIfExist(for: self.viewModel.getSongIndex())
     }
     
     @objc private func timeTriggered() {
         viewModel.updateCurrentSongPlayingTime(currentTime: audioPlayer?.currentTime)
+        setupNowPlayingRemoteControlInfo()
     }
     
     @objc private func sliderFinalValue() {
@@ -247,29 +291,7 @@ class PlayerViewController: UIViewController {
         self.viewModel.setCurrentSongPlaying(song: audioPlayer)
         progressSlider.minimumValue = 0
         progressSlider.maximumValue = Float(viewModel.getCurrentSongDuration())
-        self.setSongMetadaDataIfExist(for: index)
-    }
-    
-    func setSongMetadaDataIfExist(for songIndex: Int) {
-        guard let url = viewModel.getSongUrl(with: songIndex) else { return }
-        let asset = AVAsset(url: url)
-        
-        if !asset.commonMetadata.isEmpty {
-            setFoundSongMetadaData(asset: asset)
-        } else {
-            songImage.image = UIImage(named: "unknownSong")
-        }
-    }
-    
-    private func setFoundSongMetadaData(asset: AVAsset) {
-        for medaDataItem in asset.commonMetadata {
-            if medaDataItem.commonKey == .commonKeyArtwork,
-               let data = medaDataItem.value as? Data {
-                songImage.image = UIImage(data: data)
-            } else {
-                songImage.image = UIImage(named: "unknownSong")
-            }
-        }
+        setupNowPlayingRemoteControlInfo()
     }
     
     private func startSongTime() {
