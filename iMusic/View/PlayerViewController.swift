@@ -272,7 +272,7 @@ class PlayerViewController: UIViewController {
     
     @objc private func sliderContinuesChange() {
         let continiousTimevalue = progressSlider.value
-        self.currentTimeLabel.text = Utils.getformattedCurrentSongTimeLabel(value: continiousTimevalue)
+        self.currentTimeLabel.text = viewModel.getformattedCurrentSongTimeLabel(value: continiousTimevalue)
     }
     
     func configureAudioSession() {
